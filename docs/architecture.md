@@ -63,6 +63,32 @@ Don't mix these up:
 - **No authentication or row-level security yet.** They arrive in a later
   module.
 
+## Module 1: Landing page
+
+**Summary:** Replaces the placeholder home page with a single landing page that
+shows Copper Home and Copper Notes, Copper Plus pricing and the 2026 privacy
+policy.
+
+| Piece | Where | What it does |
+|---|---|---|
+| Page / route | `app/page.tsx` | The only page: hero, products, showcase, Copper Plus, privacy. Still `/`, no new routes |
+| Components | `components/copper/site-header.tsx`, `site-footer.tsx` | Sticky header with links to `#products`, `#plus`, `#privacy`; Night Sky footer with the logo |
+| Images | `public/assets/{cutouts,lifestyle,brand}/` | Product cutouts and lifestyle photos, moved from `specs/module-1/assets/` with `git mv` |
+| Data | `lib/copper/catalog.ts` (read only) | Prices, plan details, features, colors, image paths and privacy points |
+| AI calls | None | |
+
+**Data flow:** user opens `/` → `app/page.tsx` reads `getProducts()`,
+`getPlans()` and `getPrivacySummary()` at build time → static HTML.
+
+**Decisions and trade-offs:** Every price and plan detail is formatted from the
+catalog (`formatUsd`, `formatMemory`, `formatNotesHours`), so changing the
+catalog changes the page. Alt text and captions for photos live in the page,
+keyed by the catalog's image paths. Colors use theme classes; the footer and
+swatches use the brand hex values directly.
+
+**Risks and open questions:** Privacy copy must follow the 2026 policy; older
+documents that say Copper "never records" are wrong and must not be quoted.
+
 ## Adding a module
 
 When a module changes how the app fits together, add a section here:
